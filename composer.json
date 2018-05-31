@@ -1,0 +1,20 @@
+{
+    "name": "zarplata/zabbix-sender",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Platonov Andrey",
+            "email": "a.platonov@office.ngs.ru"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "ext-socket": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zarplata\\Zabbix\\": "src"
+        }
+    }
+}
