@@ -100,27 +100,27 @@ class ZabbixSender
         );
 
         switch (true) {
-        case !$bytesCount:
-            throw new ZabbixNetworkException(
-                sprintf(
-                    "can't send %d bytes to zabbix server %s:%d",
-                    $payloadLength,
-                    $this->serverAddress,
-                    $this->serverPort
-                )
-            );
+            case !$bytesCount:
+                throw new ZabbixNetworkException(
+                    sprintf(
+                        "can't send %d bytes to zabbix server %s:%d",
+                        $payloadLength,
+                        $this->serverAddress,
+                        $this->serverPort
+                    )
+                );
 
-        case $bytesCount != $payloadLength:
-            throw new ZabbixNetworkException(
-                sprintf(
-                    "incorrect count of bytes %s sended, expected: %d",
-                    $bytesCount,
-                    $payloadLength
-                )
-            );
+            case $bytesCount != $payloadLength:
+                throw new ZabbixNetworkException(
+                    sprintf(
+                        "incorrect count of bytes %s sended, expected: %d",
+                        $bytesCount,
+                        $payloadLength
+                    )
+                );
 
-        default:
-            break;
+            default:
+                break;
         }
 
         $this->checkResponse($socket);
@@ -183,18 +183,18 @@ class ZabbixSender
         );
 
         switch (true) {
-        case $response === null:
-        case $response === false:
-            throw new ZabbixResponseException(
-                sprintf(
-                    "can't decode zabbix server response %s, reason: %s",
-                    $responseWithoutHeader,
-                    json_last_error_msg()
-                )
-            );
+            case $response === null:
+            case $response === false:
+                throw new ZabbixResponseException(
+                    sprintf(
+                        "can't decode zabbix server response %s, reason: %s",
+                        $responseWithoutHeader,
+                        json_last_error_msg()
+                    )
+                );
 
-        default:
-            break;
+            default:
+                break;
         }
 
         $zabbixResponse = new ZabbixResponse($response);

@@ -14,7 +14,7 @@ class Packet implements \JsonSerializable
      */
     private $packet = [];
 
-    public function __construct(string $request='sender data')
+    public function __construct(string $request = 'sender data')
     {
         $this->packet['request'] = $request;
     }
