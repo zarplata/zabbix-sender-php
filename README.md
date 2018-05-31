@@ -1,10 +1,11 @@
 # Zabbix sender
 
 Zabbix sender it's a PHP implementation of Zabbix sender protocol.
-With that library you can send any metric to Zabbix server.
+With this library you can send any metric to Zabbix server.
 Additional information about Zabbix sender protocol and request/response
 you can be found in official documentation:
     - https://www.zabbix.com/documentation/3.4/manual/appendix/items/trapper
+
     - https://www.zabbix.com/documentation/3.4/manual/appendix/protocols/header_datalen
 
 ### Installation
