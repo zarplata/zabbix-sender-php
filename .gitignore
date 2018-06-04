@@ -1,2 +1,4 @@
 tags
 .php_cs.cache
+vendor/
+
