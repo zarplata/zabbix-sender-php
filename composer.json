@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": "^7.0",
-        "ext-socket": "*"
+        "ext-sockets": "*"
     },
     "autoload": {
         "psr-4": {
