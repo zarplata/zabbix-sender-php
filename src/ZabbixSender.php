@@ -10,6 +10,13 @@ use Zarplata\Zabbix\Exception\ZabbixResponseException;
 class ZabbixSender
 {
     /**
+     * Instance instances array 
+     *
+     * @var array 
+     */
+    protected static $instances = array();
+
+    /**
      *  Zabbix protocol header
      *
      *  @var string
@@ -46,12 +53,48 @@ class ZabbixSender
      */
     private $packet;
 
+    /**
+     * Create singletone object
+     *
+     * @param string $name Name of object
+     * 
+     * @return ZabbixSender instance 
+     */
+    public static function instance($name = 'default')
+    {
+        if (!isset(self::$instances[$name])) {
+            self::$instances[$name] = new static($name);
+        }
+
+        return self::$instances[$name];
+    }
+
     public function __construct(
         string $serverAddress,
         int $serverPort=10051
     ) {
         $this->serverAddress = $serverAddress;
         $this->serverPort = $serverPort;
+    }
+
+    /**
+     * Configure connection parameters to Zabbix server 
+     *
+     * @param array $options Configuration options 
+     *
+     * @return Configurated instance
+     */
+    public function configure(array $options = array()) 
+    {
+        if (isset($options['server_address'])) {
+            $this->serverAddress = $options['server_address'];
+        }
+
+        if (isset($options['server_port'])) {
+            $this->serverPort = intval($options['server_port']);
+        }
+
+        return $this;
     }
 
     /**
