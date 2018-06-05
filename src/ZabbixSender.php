@@ -54,6 +54,11 @@ class ZabbixSender
     private $packet;
 
     /**
+     * @var bool Disable send operation
+     */
+    private $disable = false;
+
+    /**
      * Create singletone object
      *
      * @param string $name Name of object
@@ -94,7 +99,31 @@ class ZabbixSender
             $this->serverPort = intval($options['server_port']);
         }
 
+        if (isset($options['disable'])) {
+            $this->disable = boolval($options['disable']);
+        }
+
         return $this;
+    }
+
+    /**
+     * Disable sender functionality. It may be necessary if you want
+     * switch off send metrics but you don't want remove the code 
+     * from your project.
+     *
+     * @return void
+     */
+    public function disable() {
+        $this->disable = true;
+    }
+
+    /**
+     * Enable sender functionality. This is reverse operation of `disable()`
+     *
+     * @return void
+     */
+    public function enable() {
+        $this->disable = false;
     }
 
     /**
@@ -110,6 +139,10 @@ class ZabbixSender
      */
     public function send(ZabbixPacket $packet)
     {
+        if ($this->disable) {
+            return;
+        }
+
         $payload = $this->makePayload($packet);
         $payloadLength = strlen($payload);
 
