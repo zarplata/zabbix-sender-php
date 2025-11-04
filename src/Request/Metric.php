@@ -7,40 +7,28 @@ namespace Zarplata\Zabbix\Request;
  */
 class Metric implements \JsonSerializable
 {
-    /**
-     * @var string
-     */
-    private $itemKey;
+    private string $itemKey;
 
-    /**
-     * @var string
-     */
-    private $itemValue;
+    private string|int|float $itemValue;
 
-    /**
-     * @var string
-     */
-    private $hostname;
+    private string $hostname;
 
-    /**
-     * @var int
-     */
-    private $timestamp;
+    private int $timestamp;
 
     public function __construct(
         string $itemKey,
-        string $itemValue
+        string|int|float $itemValue,
+        string|null $hostname = null,
+        int|null $time = null
     ) {
         $this->itemKey = $itemKey;
         $this->itemValue = $itemValue;
-        $this->hostname = gethostname();
-        $this->timestamp = time();
+        $this->hostname = $hostname ?? gethostname();
+        $this->timestamp = $time ?? time();
     }
 
     /**
      * Add custom hostname to metric
-     *
-     * @param string $hostname
      */
     public function withHostname(string $hostname): static
     {
@@ -50,8 +38,6 @@ class Metric implements \JsonSerializable
 
     /**
      * Add custom timestamp to metric
-     *
-     * @param int $timestamp
      */
     public function withTimestamp(int $timestamp): static
     {
@@ -59,7 +45,10 @@ class Metric implements \JsonSerializable
         return $this;
     }
 
-    #[\ReturnTypeWillChange]
+    /**
+     * @return array<string, string|int|float>
+     * @phpstan-return array{host: string, key: string, value: string|int|float, clock: int}
+     */
     public function jsonSerialize(): array
     {
         return [

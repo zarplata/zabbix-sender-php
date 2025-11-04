@@ -10,13 +10,17 @@ use Zarplata\Zabbix\Request\Metric as ZabbixMetric;
 class Packet implements \JsonSerializable
 {
     /**
-     * @var array
+     * @var array<string, string|ZabbixMetric[]>
+     * @phpstan-var array{request: string, data: ZabbixMetric[]}
      */
-    private $packet = [];
+    private array $packet;
 
     public function __construct(string $request = 'sender data')
     {
-        $this->packet['request'] = $request;
+        $this->packet = [
+            'request' => $request,
+            'data' => [],
+        ];
     }
 
     public function addMetric(ZabbixMetric $metric): void
@@ -24,12 +28,19 @@ class Packet implements \JsonSerializable
         $this->packet['data'][] = $metric;
     }
 
+    /**
+     * @return array<string, string|ZabbixMetric[]>
+     * @phpstan-return array{request: string, data: ZabbixMetric[]}
+     */
     public function getPacket(): array
     {
         return $this->packet;
     }
 
-    #[\ReturnTypeWillChange]
+    /**
+     * @return array<string, string|ZabbixMetric[]>
+     * @phpstan-return array{request: string, data: ZabbixMetric[]}
+     */
     public function jsonSerialize(): array
     {
         return $this->packet;

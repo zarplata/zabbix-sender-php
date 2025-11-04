@@ -12,31 +12,20 @@ class Response
 {
     private const SUCCESS_RESPONSE = 'success';
 
-    /*
-     * @var string
-     */
-    private $responceStatus;
+    private string $responceStatus;
+
+    private int $processedItems;
+
+    private int $failedItems;
+
+    private int $totalItems;
+
+    private float $secondSpent;
 
     /**
-     * @var int
+     * @param array<string, string> $response
+     * @phpstan-param array{response?: string, info?: string} $response
      */
-    private $processedItems;
-
-    /**
-     * @var int
-     */
-    private $failedItems;
-
-    /**
-     * @var int
-     */
-    private $totalItems;
-
-    /**
-     * @var float
-     */
-    private $secondSpent;
-    
     public function __construct(array $response)
     {
         $this->parseZabbixResponse($response);
@@ -62,21 +51,25 @@ class Response
         return $this->totalItems;
     }
 
+    public function getSecondSpent(): float
+    {
+        return $this->secondSpent;
+    }
+
     /**
      * Parse array to Response class properties
      *
      * This method takes array of values through argument
      * check required fields - `response` and `info` and
      * trying to find information about processed items
-     * to zabbix server through reqular expression.
+     * to zabbix server through regular expression.
      *
-     * @param array $response
-     *
-     * @return void
+     * @param array<string, string> $response
+     * @phpstan-param array{response?: string, info?: string} $response
      *
      * @throws ZabbixResponseException
      */
-    private function parseZabbixResponse(array $response)
+    private function parseZabbixResponse(array $response): void
     {
         if (!isset($response['response'])) {
             throw new ZabbixResponseException(
@@ -132,7 +125,7 @@ class Response
          * $matches[1] - 2 (processed)
          * $matches[2] - 0 (failed)
          * $matches[3] - 2 (total)
-         * $matches[4] - 0.000059 (secods spent)
+         * $matches[4] - 0.000059 (seconds spent)
          */
         $this->processedItems = intval($matches[1]);
         $this->failedItems = intval($matches[2]);
